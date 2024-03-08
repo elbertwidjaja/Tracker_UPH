@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "@/src/components/Themed";
 import ItemReminderCard from "@/src/components/ItemReminderCard";
+import ItemCards from "@/src/components/ItemCards";
 
 export default function TabOneScreen({ navigation }) {
   return (
@@ -15,9 +16,7 @@ export default function TabOneScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <ItemReminderCard />
-      <ItemReminderCard />
-      <ItemReminderCard />
+      <ItemCards />
     </>
   );
 }
