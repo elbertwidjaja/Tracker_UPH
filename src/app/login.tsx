@@ -9,79 +9,94 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import useFetch from "../hooks/useFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
 };
 
-interface UserData {
-  customerId: number;
-  first_name: string;
-  last_name: string;
-  address: string;
-  email: string;
-  password: string;
-}
-
 export default function Login() {
   const navigation = useNavigation<RootStackParamList>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const { fetchData } = useFetch();
 
   const login = async () => {
+    const urlAdmin = "http://localhost:3000/api/admin/login";
     const url = "http://localhost:3000/api/login";
     const method = "POST";
     const body = { email, password };
 
-    try {
-      const responseData = await fetchData(url, method, body);
+    if (!email) {
+      setEmailError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
 
-      if (responseData.data.token) {
-        await AsyncStorage.setItem("token", responseData.data.token);
-        navigateToHome();
-      } else {
-        alert("Invalid email or password");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      alert("An error occurred while fetching data");
+    if (!email || !password) {
+      return;
+    }
+
+    if (email.startsWith("admin")) {
+      const responseData = await fetchData(urlAdmin, method, body);
+      await AsyncStorage.setItem("token", responseData.data.token);
+
+      navigateToAdmin();
+    } else {
+      const responseData = await fetchData(url, method, body);
+      await AsyncStorage.setItem("token", responseData.data.token);
+
+      navigateToHome();
     }
   };
 
   const navigateToHome = () => navigation.navigate("index");
+  const navigateToAdmin = () => navigation.navigate("admin");
   const navigateToSignup = () => navigation.navigate("signup");
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#777"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#777"
-          secureTextEntry
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity style={styles.button} onPress={login}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.signupButton}
-          onPress={navigateToSignup}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+    <>
+      <TouchableOpacity style={styles.button_home}>
+        <Link href="/">
+          <Ionicons name="arrow-back" size={30} color="black" />
+        </Link>
+      </TouchableOpacity>
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.form}>
+          <TextInput
+            style={[styles.input, emailError && styles.inputError]}
+            placeholder="Email"
+            placeholderTextColor="#777"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            onChangeText={setEmail}
+            onBlur={() => setEmailError(!email)}
+          />
+          <TextInput
+            style={[styles.input, passwordError && styles.inputError]}
+            placeholder="Password"
+            placeholderTextColor="#777"
+            secureTextEntry
+            onChangeText={setPassword}
+            onBlur={() => setPasswordError(!password)}
+          />
+          <TouchableOpacity style={styles.button} onPress={login}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.signupButton}
+            onPress={navigateToSignup}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -107,6 +122,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 10,
   },
+  inputError: {
+    borderColor: "red",
+    borderWidth: 1,
+  },
   button: {
     backgroundColor: "#007bff",
     borderRadius: 5,
@@ -123,5 +142,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  button_home: {
+    margin: 15,
   },
 });

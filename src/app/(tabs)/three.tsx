@@ -1,33 +1,150 @@
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Button, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Text } from "../../components/Themed";
+import useAuth from "@/src/hooks/useAuth";
+import PleaseLogin from "@/src/components/PleaseLogin";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import useFetch from "@/src/hooks/useFetch";
+import { Link } from "expo-router";
 
-import { Text, View } from "../../components/Themed";
+type Profile = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  address: string;
+};
 
-export default function TabTwoScreen() {
+export default function Three() {
+  const isLoggedIn = useAuth();
+  const { fetchData } = useFetch();
+  const [profileData, setProfileData] = useState<Profile>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    address: "",
+  });
+
+  const getCustomerData = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const url = "http://localhost:3000/api/profile";
+    const method = "GET";
+    const body = "";
+    const headers = { Authorization: `Bearer ${token}` };
+
+    const customerData = await fetchData(url, method, body, headers);
+    setProfileData(customerData.data[0]);
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      getCustomerData();
+    }
+  }, [isLoggedIn]);
+
+  const clearAsyncStorage = async () => {
+    AsyncStorage.clear();
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-    </View>
+    <>
+      {!isLoggedIn ? (
+        <PleaseLogin />
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.cardTitle}>About You</Text>
+          <View style={styles.card}>
+            <TouchableOpacity style={styles.aboutYouContent} onPress={() => {}}>
+              <Text>
+                Nama : {profileData.first_name} {profileData.last_name}
+              </Text>
+              <Text>Alamat : {profileData.address}</Text>
+              <Text>Email : {profileData.email}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.cardTitle}>Pengaturan Akun</Text>
+          <View style={styles.card}>
+            <TouchableOpacity style={styles.cardContent} onPress={() => {}}>
+              <Text>Ubah Password</Text>
+              <Ionicons name="arrow-forward" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.cardTitle}>Bantuan</Text>
+          <View style={styles.card}>
+            <TouchableOpacity style={styles.cardContent} onPress={() => {}}>
+              <Text>Syarat dan Kebijakan</Text>
+              <Ionicons name="arrow-forward" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.card}>
+            <TouchableOpacity style={styles.cardContent} onPress={() => {}}>
+              <Text>Kebijakan Privasi</Text>
+              <Ionicons name="arrow-forward" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.card}>
+            <TouchableOpacity style={styles.cardContent} onPress={() => {}}>
+              <Text>Rate ExpiRemind</Text>
+              <Ionicons name="arrow-forward" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.card}>
+            <TouchableOpacity style={styles.cardContent} onPress={() => {}}>
+              <Text>Hubungi Kami</Text>
+              <Ionicons name="arrow-forward" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Link href="/">
+              <Button
+                title="Logout"
+                onPress={() => {
+                  clearAsyncStorage();
+                  console.log("Berhasil Logout");
+                }}
+              />
+            </Link>
+          </View>
+        </View>
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    margin: 20,
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
+  aboutYouContent: {
+    flexDirection: "column",
+  },
+  card: {
+    width: "100%",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontSize: 16,
     fontWeight: "bold",
+    marginBottom: 10,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  buttonContainer: {
+    width: "100%",
+    marginTop: 10,
   },
 });

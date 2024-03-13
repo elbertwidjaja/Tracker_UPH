@@ -4,19 +4,24 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "@/src/components/Themed";
 import ItemReminderCard from "@/src/components/ItemReminderCard";
 import ItemCards from "@/src/components/ItemCards";
+import { useNavigation } from "expo-router";
 
-export default function TabOneScreen({ navigation }) {
+type RootStackParamList = {
+  navigate(arg0: string): void;
+};
+
+export default function TabOneScreen() {
+  const navigation = useNavigation<RootStackParamList>();
   return (
     <>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.welcomeText}>Welcome back Elbert</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-            <Ionicons name="person-circle-outline" size={24} color="black" />
+          <TouchableOpacity onPress={() => navigation.navigate("login")}>
+            <Ionicons name="log-in-outline" size={24} color="black" />
           </TouchableOpacity>
         </View>
       </View>
-      <ItemCards />
     </>
   );
 }

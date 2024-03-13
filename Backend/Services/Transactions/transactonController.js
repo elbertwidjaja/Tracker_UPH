@@ -20,7 +20,6 @@ const getAllTransactions = (req, res) => {
 
 const getCustomerTransactions = (req, res) => {
   const { customerId } = req.user;
-  console.log(customerId, "HAHAHAH");
 
   const getCustomerTransactionsQuery =
     "SELECT * FROM `transaction` WHERE customer_id = ?";
@@ -45,14 +44,16 @@ const getCustomerTransactions = (req, res) => {
 };
 
 const addTransaction = (req, res) => {
-  const { customerId, shopId, itemId, itemName, purchaseDate, dueDate } =
+  const { customerId } = req.user;
+  const { shopId, itemId, itemName, purchaseDate, dueDate, shopName } =
     req.body;
+  console.log(req.body);
   const addTransactionQuery =
-    "INSERT INTO `transaction` (customer_id, shop_id, item_id, item_name, purchase_date, due_date) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO `transaction` (customer_id, shopId, item_id, item_name, purchase_date, due_date, shop_name) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
   connection.query(
     addTransactionQuery,
-    [customerId, shopId, itemId, itemName, purchaseDate, dueDate],
+    [customerId, shopId, itemId, itemName, purchaseDate, dueDate, shopName],
     (err, results) => {
       if (err) {
         console.error("Error:", err);
