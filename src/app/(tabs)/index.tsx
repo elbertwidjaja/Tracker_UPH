@@ -2,8 +2,6 @@ import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "@/src/components/Themed";
-import ItemReminderCard from "@/src/components/ItemReminderCard";
-import ItemCards from "@/src/components/ItemCards";
 import { useNavigation } from "expo-router";
 
 type RootStackParamList = {
@@ -16,7 +14,7 @@ export default function TabOneScreen() {
     <>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.welcomeText}>Welcome back Elbert</Text>
+          <Text style={styles.welcomeText}>Welcome to ExpiRemind</Text>
           <TouchableOpacity onPress={() => navigation.navigate("login")}>
             <Ionicons name="log-in-outline" size={24} color="black" />
           </TouchableOpacity>

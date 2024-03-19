@@ -76,4 +76,40 @@ const adminInsertTransactionsbyId = (req, res) => {
   );
 };
 
-export default { adminInsertTransactionsbyId, adminLogin };
+const adminGetTransactionById = (req, res) => {
+  const { transactionId } = req.params;
+
+  const getTransactionQuery =
+    "SELECT * FROM `transaction` WHERE transaction_id = ?";
+
+  connection.query(getTransactionQuery, [transactionId], (err, results) => {
+    if (err) {
+      console.error("Error:", err);
+      return res.status(500).json({
+        error: true,
+        message: "Error fetching transaction",
+        details: err.message,
+      });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "Transaction not found",
+      });
+    }
+
+    const transaction = results[0];
+    return res.status(200).json({
+      error: false,
+      message: "Transaction fetched successfully",
+      transaction,
+    });
+  });
+};
+
+export default {
+  adminInsertTransactionsbyId,
+  adminLogin,
+  adminGetTransactionById,
+};

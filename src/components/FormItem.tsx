@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import useFetch from "../hooks/useFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PickDate from "@/src/components/PickDate";
 
 type ItemType = {
   id: number;
@@ -13,12 +20,12 @@ type ItemType = {
 const FormItem = () => {
   const { fetchData } = useFetch();
 
-  const [dueDate, setDueDate] = useState("");
-  const [purchaseDate, setPurchaseDate] = useState("");
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedItemId, setSelectedItemId] = useState("");
   const [customerID, setCustomerID] = useState("");
   const [items, setItems] = useState<ItemType[]>([]);
+  const [purchaseDate, setPurchaseDate] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   const getAdminShopsDatas = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -29,7 +36,6 @@ const FormItem = () => {
     const headers = { Authorization: `Bearer ${token}` };
 
     const itemsData = await fetchData(url, method, body, headers);
-    console.log(itemsData, "data");
     setItems(itemsData);
   };
 
@@ -58,8 +64,16 @@ const FormItem = () => {
     insertAdminTransaction();
   };
 
+  const handlePurchaseDateChange = (date: React.SetStateAction<string>) => {
+    setPurchaseDate(date);
+  };
+
+  const handleDueDateChange = (date: React.SetStateAction<string>) => {
+    setDueDate(date);
+  };
+
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.label}>Admin Add Item</Text>
 
       <Text style={styles.label}>Item:</Text>
@@ -89,30 +103,19 @@ const FormItem = () => {
       />
 
       <Text style={styles.label}>Purchase Date:</Text>
-      <TextInput
-        style={styles.input}
-        value={purchaseDate}
-        onChangeText={setPurchaseDate}
-        placeholder="Enter purchase date"
-      />
+      <PickDate onDateChange={handlePurchaseDateChange} />
 
       <Text style={styles.label}>Due Date:</Text>
-      <TextInput
-        style={styles.input}
-        value={dueDate}
-        onChangeText={setDueDate}
-        placeholder="Enter due date"
-      />
+      <PickDate onDateChange={handleDueDateChange} />
 
-      <Button title="Submit" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
   label: {
     fontSize: 16,
     marginBottom: 5,
@@ -131,6 +134,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 10,
+  },
+  button: {
+    marginTop: 25,
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
   },
 });
 

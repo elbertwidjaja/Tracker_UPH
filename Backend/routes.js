@@ -34,11 +34,19 @@ routes.get(
 );
 routes.post("/transaction", authenticate, transactonController.addTransaction);
 
+// ADMIN ROUTES
+
 routes.post(
   "/admin/transactions",
   authenticate,
   adminController.adminInsertTransactionsbyId
 );
+
+routes.get(
+  "/admin/transactions/:transactionId",
+  adminController.adminGetTransactionById
+);
+
 routes.post("/admin/login", adminController.adminLogin);
 routes.get("/admin/items", authenticate, shopController.getItemsByShopId);
 

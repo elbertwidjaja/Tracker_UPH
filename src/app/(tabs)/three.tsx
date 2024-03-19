@@ -6,7 +6,7 @@ import PleaseLogin from "@/src/components/PleaseLogin";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useFetch from "@/src/hooks/useFetch";
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 
 type Profile = {
   first_name: string;
@@ -15,7 +15,12 @@ type Profile = {
   address: string;
 };
 
+type RootStackParamList = {
+  navigate(arg0: string): void;
+};
+
 export default function Three() {
+  const navigation = useNavigation<RootStackParamList>();
   const isLoggedIn = useAuth();
   const { fetchData } = useFetch();
   const [profileData, setProfileData] = useState<Profile>({
@@ -101,15 +106,14 @@ export default function Three() {
           </View>
 
           <View style={styles.buttonContainer}>
-            <Link href="/">
-              <Button
-                title="Logout"
-                onPress={() => {
-                  clearAsyncStorage();
-                  console.log("Berhasil Logout");
-                }}
-              />
-            </Link>
+            <Button
+              title="Logout"
+              onPress={() => {
+                clearAsyncStorage();
+                console.log("Berhasil Logout");
+                navigation.navigate("index");
+              }}
+            />
           </View>
         </View>
       )}
