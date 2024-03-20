@@ -22,6 +22,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [token, setToken] = useState("");
   const { fetchData } = useFetch();
 
   const login = async () => {
@@ -49,6 +50,10 @@ export default function Login() {
     } else {
       const responseData = await fetchData(url, method, body);
       await AsyncStorage.setItem("token", responseData.data.token);
+      console.log(responseData, "resdata");
+
+      setToken(responseData.data.token);
+      console.log(responseData.data.token, "tokennnn");
 
       navigateToHome();
     }

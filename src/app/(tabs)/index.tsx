@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "@/src/components/Themed";
 import { useNavigation } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -10,6 +11,7 @@ type RootStackParamList = {
 
 export default function TabOneScreen() {
   const navigation = useNavigation<RootStackParamList>();
+
   return (
     <>
       <View style={styles.container}>

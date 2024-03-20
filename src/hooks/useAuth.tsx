@@ -9,9 +9,9 @@ function useAuth() {
       const token = await AsyncStorage.getItem("token");
       console.log(token, "tpken");
 
-      setIsLoggedIn(!!token);
+      setIsLoggedIn(!token);
+      console.log(isLoggedIn, "use auth");
     };
-
     checkLoggedIn();
   }, []);
 

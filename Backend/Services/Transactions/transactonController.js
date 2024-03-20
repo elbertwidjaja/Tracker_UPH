@@ -71,4 +71,38 @@ const addTransaction = (req, res) => {
   );
 };
 
-export default { getAllTransactions, getCustomerTransactions, addTransaction };
+const deleteTransactionById = (req, res) => {
+  const { transactionId } = req.params;
+
+  const deleteTransactionQuery =
+    "DELETE FROM `transaction` WHERE transaction_id = ?";
+
+  connection.query(deleteTransactionQuery, [transactionId], (err, result) => {
+    if (err) {
+      console.error("Error:", err);
+      return res.status(500).json({
+        error: true,
+        message: "Error deleting transaction",
+      });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "Transaction not found",
+      });
+    }
+
+    return res.status(200).json({
+      error: false,
+      message: "Transaction deleted successfully",
+    });
+  });
+};
+
+export default {
+  getAllTransactions,
+  getCustomerTransactions,
+  addTransaction,
+  deleteTransactionById,
+};

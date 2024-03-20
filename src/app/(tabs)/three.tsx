@@ -41,12 +41,6 @@ export default function Three() {
     setProfileData(customerData.data[0]);
   };
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      getCustomerData();
-    }
-  }, [isLoggedIn]);
-
   const clearAsyncStorage = async () => {
     AsyncStorage.clear();
   };

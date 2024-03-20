@@ -2,7 +2,6 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "../../components/Themed";
 import ItemCards from "@/src/components/ItemCards";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
 import useAuth from "@/src/hooks/useAuth";
 import PleaseLogin from "@/src/components/PleaseLogin";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +12,8 @@ type RootStackParamList = {
 
 export default function TabTwoScreen() {
   const isLoggedIn = useAuth();
+  console.log(isLoggedIn, "two.tsx");
+
   const navigation = useNavigation<RootStackParamList>();
 
   return (
@@ -29,6 +30,7 @@ export default function TabTwoScreen() {
             <Text style={styles.addItemText}>Add Item</Text>
           </TouchableOpacity>
           <View style={styles.container}>
+            <Text>Your Cart : </Text>
             <ItemCards />
           </View>
         </>
@@ -43,15 +45,15 @@ const styles = StyleSheet.create({
   },
   addItemContainer: {
     flexDirection: "row",
-    backgroundColor: "#333333",
+    backgroundColor: "#ADD8E6",
     padding: 15,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 20,
   },
   addItemText: {
     marginLeft: 10,
     fontSize: 16,
-    fontWeight: "bold",
     color: "black",
   },
 });

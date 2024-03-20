@@ -3,7 +3,7 @@ import express from "express";
 import customersController from "./Services/Cutomers/customersController.js";
 import shopController from "./Services/Shop/shopController.js";
 import getAllItems from "./Services/Item/itemController.js";
-import transactonController from "./Services/Transactions/transactonController.js";
+import transactionController from "./Services/Transactions/transactonController.js";
 import authenticate from "./Middleware/Auth.js";
 import authController from "./Services/Authentication/authController.js";
 import getDataByCustomerId from "./Services/Profile/ProfileController.js";
@@ -26,13 +26,19 @@ routes.get("/shops", shopController.getAllShops);
 
 routes.get("/items", getAllItems);
 
-routes.get("/transaction", transactonController.getAllTransactions);
+routes.get("/transaction", transactionController.getAllTransactions);
 routes.get(
   "/transaction/customer",
   authenticate,
-  transactonController.getCustomerTransactions
+  transactionController.getCustomerTransactions
 );
-routes.post("/transaction", authenticate, transactonController.addTransaction);
+routes.post("/transaction", authenticate, transactionController.addTransaction);
+
+routes.delete(
+  "/transaction/:transactionId",
+  authenticate,
+  transactionController.deleteTransactionById
+);
 
 // ADMIN ROUTES
 

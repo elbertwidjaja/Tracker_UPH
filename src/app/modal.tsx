@@ -10,6 +10,7 @@ import useFetch from "../hooks/useFetch";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import PickDate from "../components/PickDate";
 
 export default function ModalScreen() {
   const { fetchData } = useFetch();
@@ -80,19 +81,22 @@ export default function ModalScreen() {
           shopId: selectedShopId,
           itemId: itemId,
           itemName: selectedItemName,
-          purchaseDate: "10-12-21",
-          dueDate: "10-12-24",
+          purchaseDate: purchaseDate,
+          dueDate: dueDate,
           shopName: shopName,
         };
         const headers = { Authorization: `Bearer ${token}` };
 
         const data = await fetchData(url, method, body, headers);
-        console.log(data);
+
         navigation.goBack();
       } catch (error) {
         console.error(error);
       }
     };
+
+    console.log(purchaseDate, "date pruchase");
+    console.log(dueDate, "date due");
 
     addTransaction();
   };
@@ -101,18 +105,11 @@ export default function ModalScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Add Item</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Purchase Date"
-        value={purchaseDate}
-        onChangeText={(text) => setPurchaseDate(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Due Date"
-        value={dueDate}
-        onChangeText={(text) => setDueDate(text)}
-      />
+      <Text style={styles.label}>Purchase Date</Text>
+      <PickDate onDateChange={(date: string) => setPurchaseDate(date)} />
+
+      <Text style={styles.label}>Due Date</Text>
+      <PickDate onDateChange={(date: string) => setDueDate(date)} />
 
       <Text style={styles.label}>Shop Name</Text>
 
