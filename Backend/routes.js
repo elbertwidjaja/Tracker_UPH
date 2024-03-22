@@ -7,6 +7,7 @@ import transactionController from "./Services/Transactions/transactonController.
 import authenticate from "./Middleware/Auth.js";
 import authController from "./Services/Authentication/authController.js";
 import getDataByCustomerId from "./Services/Profile/ProfileController.js";
+import getNotification from "./Services/Notification/notificationController.js";
 
 import adminController from "./Services/Admin/adminController.js";
 
@@ -39,6 +40,8 @@ routes.delete(
   authenticate,
   transactionController.deleteTransactionById
 );
+
+routes.get("/notification", getNotification);
 
 // ADMIN ROUTES
 
