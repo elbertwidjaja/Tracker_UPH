@@ -5,14 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import useAuth from "@/src/hooks/useAuth";
 import PleaseLogin from "@/src/components/PleaseLogin";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
 };
 
 export default function TabTwoScreen() {
-  const isLoggedIn = useAuth();
-  console.log(isLoggedIn, "two.tsx");
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const navigation = useNavigation<RootStackParamList>();
 

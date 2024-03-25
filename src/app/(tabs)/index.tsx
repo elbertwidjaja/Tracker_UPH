@@ -3,7 +3,9 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "@/src/components/Themed";
 import { useNavigation } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import useAuth from "@/src/hooks/useAuth";
+import useFetch from "@/src/hooks/useFetch";
+import { CronJob } from "cron";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -11,6 +13,34 @@ type RootStackParamList = {
 
 export default function TabOneScreen() {
   const navigation = useNavigation<RootStackParamList>();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const { fetchData } = useFetch();
+
+  const getNotification = async () => {
+    // const token = await AsyncStorage.getItem("token");
+    const url = "http://localhost:3000/api/notification";
+    const method = "GET";
+    const body = "";
+    const data = await fetchData(url, method, body);
+
+    console.log(data, "data");
+  };
+
+  // const job = new CronJob(
+  //   "*/10 * * * * *", // cronTime (runs every 10 seconds)
+  //   function () {
+  //     console.log("You will see this message every 10 seconds in Jakarta time");
+  //   }, // onTick
+  //   null, // onComplete
+  //   true, // start
+  //   "Asia/Jakarta" // timeZone
+  // );
+  // job.start();
+
+  useEffect(() => {
+    getNotification();
+    console.log("inside use Effect");
+  }, []);
 
   return (
     <>

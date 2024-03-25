@@ -21,7 +21,7 @@ type RootStackParamList = {
 
 export default function Three() {
   const navigation = useNavigation<RootStackParamList>();
-  const isLoggedIn = useAuth();
+  const { isLoggedIn, setIsLoggedIn, logout } = useAuth();
   const { fetchData } = useFetch();
   const [profileData, setProfileData] = useState<Profile>({
     first_name: "",
@@ -100,14 +100,7 @@ export default function Three() {
           </View>
 
           <View style={styles.buttonContainer}>
-            <Button
-              title="Logout"
-              onPress={() => {
-                clearAsyncStorage();
-                console.log("Berhasil Logout");
-                navigation.navigate("index");
-              }}
-            />
+            <Button title="Logout" onPress={logout} />
           </View>
         </View>
       )}

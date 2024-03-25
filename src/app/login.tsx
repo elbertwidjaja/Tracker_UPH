@@ -11,6 +11,7 @@ import useFetch from "../hooks/useFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import useAuth from "../hooks/useAuth";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -24,6 +25,8 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState(false);
   const [token, setToken] = useState("");
   const { fetchData } = useFetch();
+
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const login = async () => {
     const urlAdmin = "http://localhost:3000/api/admin/login";
@@ -50,12 +53,10 @@ export default function Login() {
     } else {
       const responseData = await fetchData(url, method, body);
       await AsyncStorage.setItem("token", responseData.data.token);
-      console.log(responseData, "resdata");
 
-      setToken(responseData.data.token);
-      console.log(responseData.data.token, "tokennnn");
+      setIsLoggedIn(true);
 
-      navigateToHome();
+      return navigateToHome();
     }
   };
 

@@ -7,10 +7,13 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useColorScheme } from "../components/useColorScheme";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import StartScreen from "./SplashScreen";
+import { NavigationContainer } from "@react-navigation/native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,6 +48,19 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+  // const [token, setToken] = useState("");
+
+  // useEffect(() => {
+  //   const checkToken = async () => {
+  //     const storedToken = await AsyncStorage.getItem("token");
+  //     setToken(storedToken || "");
+  //   };
+  //   checkToken();
+  // }, []);
+
+  // if (token === "") {
+  //   return <StartScreen />;
+  // }
 
   return <RootLayoutNav />;
 }

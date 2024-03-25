@@ -1,6 +1,6 @@
 import connection from "../../config/connection.js";
 
-const getNotification = () => {
+const getNotification = (req, res) => {
   //To get Today date in YYYY-MM-DD format
   const today = new Date();
   const todayString = today.toISOString().slice(0, 10);
@@ -22,9 +22,15 @@ const getNotification = () => {
     (err, results) => {
       if (err) {
         console.error(err);
-        return;
+        return res.status(500).json({
+          error: true,
+          message: "Error in retrieving items",
+        });
       }
-      console.log(results);
+      return res.status(200).json({
+        error: false,
+        data: results,
+      });
     }
   );
 };
