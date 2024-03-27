@@ -16,6 +16,8 @@ export default function TabOneScreen() {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
   const { fetchData } = useFetch();
 
+  console.log(isLoggedIn, "ini di index.tsx");
+
   const getNotification = async () => {
     // const token = await AsyncStorage.getItem("token");
     const url = "http://localhost:3000/api/notification";
@@ -36,11 +38,6 @@ export default function TabOneScreen() {
   //   "Asia/Jakarta" // timeZone
   // );
   // job.start();
-
-  useEffect(() => {
-    getNotification();
-    console.log("inside use Effect");
-  }, []);
 
   return (
     <>

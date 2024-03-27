@@ -14,6 +14,7 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StartScreen from "./SplashScreen";
 import { NavigationContainer } from "@react-navigation/native";
+import { AuthProvider } from "../context/AuthContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,7 +63,11 @@ export default function RootLayout() {
   //   return <StartScreen />;
   // }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  );
 }
 
 function RootLayoutNav() {
