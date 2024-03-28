@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
+import useFetch from "../hooks/useFetch";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -8,7 +9,7 @@ type RootStackParamList = {
 
 type AuthContextType = {
   isLoggedIn: boolean;
-  login: () => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -30,8 +31,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkLoggedIn();
   }, []);
 
-  const login = async () => {
-    // Implement your login logic here
+  const navigateToHome = () => navigation.navigate("index");
+  const navigateToAdmin = () => navigation.navigate("admin");
+
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const { fetchData } = useFetch();
+
+  const login = async (email: string, password: string) => {
+    const urlAdmin = "http://localhost:3000/api/admin/login";
+    const url = "http://localhost:3000/api/login";
+    const method = "POST";
+    const body = { email, password };
+
+    if (!email) {
+      setEmailError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
+
+    if (!email || !password) {
+      return;
+    }
+
+    if (email.startsWith("admin")) {
+      const responseData = await fetchData(urlAdmin, method, body);
+      await AsyncStorage.setItem("token", responseData.data.token);
+
+      navigateToAdmin();
+    } else {
+      const responseData = await fetchData(url, method, body);
+      await AsyncStorage.setItem("token", responseData.data.token);
+
+      setIsLoggedIn(true);
+
+      return navigateToHome();
+    }
   };
 
   const logout = async () => {

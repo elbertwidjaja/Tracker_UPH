@@ -2,17 +2,18 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "../../components/Themed";
 import ItemCards from "@/src/components/ItemCards";
 import { Ionicons } from "@expo/vector-icons";
-import useAuth from "@/src/hooks/useAuth";
 import PleaseLogin from "@/src/components/PleaseLogin";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
+import { useAuth } from "@/src/context/AuthContext";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
 };
 
 export default function TabTwoScreen() {
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
+
+  console.log(isLoggedIn, "two");
 
   const navigation = useNavigation<RootStackParamList>();
 

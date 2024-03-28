@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import useFetch from "../hooks/useFetch";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import PickDate from "../components/PickDate";
+import * as Notifications from "expo-notifications";
+import { styles } from "./modalStyle";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 export default function ModalScreen() {
   const { fetchData } = useFetch();
@@ -57,7 +61,7 @@ export default function ModalScreen() {
     getShopsName();
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const findShopNameById = (id: number) => {
       const shop = shopData.find((shop) => shop.shop_id === id);
       return shop ? shop.shop_name : "";
@@ -88,6 +92,21 @@ export default function ModalScreen() {
         const headers = { Authorization: `Bearer ${token}` };
 
         const data = await fetchData(url, method, body, headers);
+
+        const { status } = await Notifications.getPermissionsAsync();
+
+        if (status !== "granted") {
+          alert("Permission to send notifications was denied");
+          return;
+        }
+
+        Notifications.scheduleNotificationAsync({
+          content: {
+            title: "There is an item that almost due!",
+            body: "Please check you items right now!",
+          },
+          trigger: null,
+        });
 
         navigation.goBack();
       } catch (error) {
@@ -162,53 +181,3 @@ export default function ModalScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  input: {
-    width: "100%",
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  label: {
-    alignSelf: "flex-start",
-    marginBottom: 5,
-  },
-  picker: {
-    width: "100%",
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    marginTop: 10,
-  },
-  pickerItem: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: "lightblue",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});

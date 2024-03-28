@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Text } from "../../components/Themed";
-import useAuth from "@/src/hooks/useAuth";
+import { useAuth } from "@/src/context/AuthContext";
 import PleaseLogin from "@/src/components/PleaseLogin";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,8 +20,7 @@ type RootStackParamList = {
 };
 
 export default function Three() {
-  const navigation = useNavigation<RootStackParamList>();
-  const { isLoggedIn, setIsLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
   const { fetchData } = useFetch();
   const [profileData, setProfileData] = useState<Profile>({
     first_name: "",
@@ -39,10 +38,6 @@ export default function Three() {
 
     const customerData = await fetchData(url, method, body, headers);
     setProfileData(customerData.data[0]);
-  };
-
-  const clearAsyncStorage = async () => {
-    AsyncStorage.clear();
   };
 
   return (
@@ -112,8 +107,6 @@ const styles = StyleSheet.create({
   container: {
     margin: 20,
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   aboutYouContent: {
     flexDirection: "column",

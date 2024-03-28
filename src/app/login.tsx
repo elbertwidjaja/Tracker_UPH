@@ -7,11 +7,9 @@ import {
   View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import useFetch from "../hooks/useFetch";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -23,46 +21,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [token, setToken] = useState("");
-  const { fetchData } = useFetch();
 
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const { login } = useAuth();
+  const navigateToSignup = () => navigation.navigate("singup");
 
-  const login = async () => {
-    const urlAdmin = "http://localhost:3000/api/admin/login";
-    const url = "http://localhost:3000/api/login";
-    const method = "POST";
-    const body = { email, password };
-
-    if (!email) {
-      setEmailError(true);
-    }
-    if (!password) {
-      setPasswordError(true);
-    }
-
-    if (!email || !password) {
-      return;
-    }
-
-    if (email.startsWith("admin")) {
-      const responseData = await fetchData(urlAdmin, method, body);
-      await AsyncStorage.setItem("token", responseData.data.token);
-
-      navigateToAdmin();
-    } else {
-      const responseData = await fetchData(url, method, body);
-      await AsyncStorage.setItem("token", responseData.data.token);
-
-      setIsLoggedIn(true);
-
-      return navigateToHome();
-    }
+  const handleLogin = async () => {
+    await login(email, password);
   };
-
-  const navigateToHome = () => navigation.navigate("index");
-  const navigateToAdmin = () => navigation.navigate("admin");
-  const navigateToSignup = () => navigation.navigate("signup");
 
   return (
     <>
@@ -91,7 +56,7 @@ export default function Login() {
             onChangeText={setPassword}
             onBlur={() => setPasswordError(!password)}
           />
-          <TouchableOpacity style={styles.button} onPress={login}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity

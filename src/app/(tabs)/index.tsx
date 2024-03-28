@@ -1,11 +1,12 @@
+import Toast from "react-native-toast-message";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "@/src/components/Themed";
-import { useNavigation } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import useAuth from "@/src/hooks/useAuth";
 import useFetch from "@/src/hooks/useFetch";
-import { CronJob } from "cron";
+import * as Notifications from "expo-notifications";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -16,8 +17,6 @@ export default function TabOneScreen() {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
   const { fetchData } = useFetch();
 
-  console.log(isLoggedIn, "ini di index.tsx");
-
   const getNotification = async () => {
     // const token = await AsyncStorage.getItem("token");
     const url = "http://localhost:3000/api/notification";
@@ -25,19 +24,18 @@ export default function TabOneScreen() {
     const body = "";
     const data = await fetchData(url, method, body);
 
-    console.log(data, "data");
+    console.log(data.data, "data");
+    if (data.data) {
+      Toast.show({
+        type: "info",
+        text1: "There is an item that is almost due",
+      });
+    }
   };
 
-  // const job = new CronJob(
-  //   "*/10 * * * * *", // cronTime (runs every 10 seconds)
-  //   function () {
-  //     console.log("You will see this message every 10 seconds in Jakarta time");
-  //   }, // onTick
-  //   null, // onComplete
-  //   true, // start
-  //   "Asia/Jakarta" // timeZone
-  // );
-  // job.start();
+  useEffect(() => {
+    getNotification();
+  }, []);
 
   return (
     <>
