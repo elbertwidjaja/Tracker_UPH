@@ -10,6 +10,7 @@ import { Picker } from "@react-native-picker/picker";
 import useFetch from "../hooks/useFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PickDate from "@/src/components/PickDate";
+import { BASE_URL } from "@/env";
 
 type ItemType = {
   id: number;
@@ -30,7 +31,7 @@ const FormItem = () => {
   const getAdminShopsDatas = async () => {
     const token = await AsyncStorage.getItem("token");
 
-    const url = "http://localhost:3000/api/admin/items";
+    const url = `${BASE_URL}admin/items`;
     const method = "GET";
     const body = "";
     const headers = { Authorization: `Bearer ${token}` };
@@ -42,7 +43,7 @@ const FormItem = () => {
   const insertAdminTransaction = async () => {
     const token = await AsyncStorage.getItem("token");
 
-    const url = "http://localhost:3000/api/admin/transactions";
+    const url = `${BASE_URL}admin/transactions`;
     const method = "POST";
     const body = {
       customerId: 2,

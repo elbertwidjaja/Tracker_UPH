@@ -31,33 +31,40 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: 2,
   },
+
   button: {
     padding: 10,
     borderRadius: 5,
-    width: "45%",
     alignItems: "center",
   },
+
   infoButton: {
-    backgroundColor: "blue",
+    backgroundColor: "#ADD8E6",
   },
+
   deleteButton: {
     backgroundColor: "red",
   },
+
   deleteButtonModal: {
     marginTop: 14,
     backgroundColor: "red",
   },
+
   buttonText: {
     color: "white",
   },
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
   },
+
+  //MODAL
   modalView: {
     margin: 20,
     backgroundColor: "white",
@@ -73,6 +80,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+
   modalText: {
     fontWeight: "bold",
     fontSize: 16,

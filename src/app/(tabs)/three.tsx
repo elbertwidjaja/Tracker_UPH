@@ -6,7 +6,7 @@ import PleaseLogin from "@/src/components/PleaseLogin";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useFetch from "@/src/hooks/useFetch";
-import { Link, useNavigation } from "expo-router";
+import { BASE_URL } from "@/env";
 
 type Profile = {
   first_name: string;
@@ -31,7 +31,7 @@ export default function Three() {
 
   const getCustomerData = async () => {
     const token = await AsyncStorage.getItem("token");
-    const url = "http://localhost:3000/api/profile";
+    const url = `${BASE_URL}profile`;
     const method = "GET";
     const body = "";
     const headers = { Authorization: `Bearer ${token}` };
@@ -39,6 +39,10 @@ export default function Three() {
     const customerData = await fetchData(url, method, body, headers);
     setProfileData(customerData.data[0]);
   };
+
+  useEffect(() => {
+    getCustomerData();
+  }, []);
 
   return (
     <>

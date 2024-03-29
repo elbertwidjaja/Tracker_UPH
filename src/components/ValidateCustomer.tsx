@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import { BASE_URL } from "@/env";
 
 function ValidateCustomer() {
   const [transactionId, setTransactionId] = useState<string>("");
@@ -23,7 +23,7 @@ function ValidateCustomer() {
       return;
     }
 
-    const url = `http://localhost:3000/api/admin/transactions/${transactionId}`;
+    const url = `${BASE_URL}admin/transactions/${transactionId}`;
 
     try {
       const response = await axios.get(url);

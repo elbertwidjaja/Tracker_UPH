@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import useFetch from "../hooks/useFetch";
+import { BASE_URL } from "@/env";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -32,7 +32,7 @@ export default function Signup() {
   const handleSignUp = () => {
     console.log(JSON.stringify(formData));
 
-    fetch("http://localhost:3000/api/customers", {
+    fetch(`${BASE_URL}customers`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

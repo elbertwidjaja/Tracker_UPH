@@ -13,8 +13,6 @@ type RootStackParamList = {
 export default function TabTwoScreen() {
   const { isLoggedIn } = useAuth();
 
-  console.log(isLoggedIn, "two");
-
   const navigation = useNavigation<RootStackParamList>();
 
   return (
@@ -31,7 +29,7 @@ export default function TabTwoScreen() {
             <Text style={styles.addItemText}>Add Item</Text>
           </TouchableOpacity>
           <View style={styles.container}>
-            <Text>Your Cart : </Text>
+            <Text style={styles.yourCartText}>Your Cart</Text>
             <ItemCards />
           </View>
         </>
@@ -56,5 +54,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     color: "black",
+  },
+  yourCartText: {
+    marginTop: 24,
+    marginBottom: 18,
+    fontSize: 18,
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

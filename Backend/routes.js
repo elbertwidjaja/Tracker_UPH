@@ -13,6 +13,10 @@ import adminController from "./Services/Admin/adminController.js";
 
 const routes = express.Router();
 
+routes.get("/hello", (req, res) => {
+  res.send("Hello, world!");
+});
+
 routes.post("/login", authController.login);
 routes.get("/logout", authController.logout);
 

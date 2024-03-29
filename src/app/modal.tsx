@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import PickDate from "../components/PickDate";
 import * as Notifications from "expo-notifications";
 import { styles } from "./modalStyle";
+import { BASE_URL } from "@/env";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -36,8 +37,8 @@ export default function ModalScreen() {
   useEffect(() => {
     const getShopsName = async () => {
       try {
-        const url1 = "http://localhost:3000/api/shops";
-        const url2 = "http://localhost:3000/api/items";
+        const url1 = `${BASE_URL}shops`;
+        const url2 = `${BASE_URL}items`;
         const method = "GET";
         const body = "";
 
@@ -79,7 +80,7 @@ export default function ModalScreen() {
       try {
         const token = await AsyncStorage.getItem("token");
 
-        const url = "http://localhost:3000/api/transaction";
+        const url = `${BASE_URL}transaction`;
         const method = "POST";
         const body = {
           shopId: selectedShopId,
@@ -113,9 +114,6 @@ export default function ModalScreen() {
         console.error(error);
       }
     };
-
-    console.log(purchaseDate, "date pruchase");
-    console.log(dueDate, "date due");
 
     addTransaction();
   };

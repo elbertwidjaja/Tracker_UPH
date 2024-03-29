@@ -6,7 +6,7 @@ import { Text, View } from "@/src/components/Themed";
 import { useNavigation } from "@react-navigation/native";
 import useAuth from "@/src/hooks/useAuth";
 import useFetch from "@/src/hooks/useFetch";
-import * as Notifications from "expo-notifications";
+import { BASE_URL } from "@/env";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -14,12 +14,10 @@ type RootStackParamList = {
 
 export default function TabOneScreen() {
   const navigation = useNavigation<RootStackParamList>();
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const { fetchData } = useFetch();
 
   const getNotification = async () => {
-    // const token = await AsyncStorage.getItem("token");
-    const url = "http://localhost:3000/api/notification";
+    const url = `${BASE_URL}notification`;
     const method = "GET";
     const body = "";
     const data = await fetchData(url, method, body);

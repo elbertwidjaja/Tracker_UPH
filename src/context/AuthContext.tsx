@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import useFetch from "../hooks/useFetch";
+import { BASE_URL } from "@/env";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -39,8 +40,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { fetchData } = useFetch();
 
   const login = async (email: string, password: string) => {
-    const urlAdmin = "http://localhost:3000/api/admin/login";
-    const url = "http://localhost:3000/api/login";
+    const urlAdmin = `${BASE_URL}admin/login`;
+    const url = `${BASE_URL}login`;
     const method = "POST";
     const body = { email, password };
 
