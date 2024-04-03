@@ -6,6 +6,8 @@ import Toast from "react-native-toast-message";
 import { BASE_URL } from "@/env";
 import { AntDesign } from "@expo/vector-icons";
 import { styles } from "./ItemCardsStyles";
+import { Image } from "react-native";
+import { useTransactionData } from "@/src/context/transactionData";
 
 type ItemType = {
   item_name: string;
@@ -18,15 +20,26 @@ type ItemType = {
   shop_name: string;
 };
 
+type ItemData = {
+  item_id: number;
+  item_name: string;
+  imageUrl: string;
+}[];
+
 function ItemCards() {
   const formatDate = (dateString: string): string => {
-    return dateString.substring(0, 10);
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + 1);
+    return date.toISOString().slice(0, 10);
   };
 
   const { fetchData } = useFetch();
-  const [transactionData, setTransactionData] = useState<ItemType[]>([]);
+  const { transactionData, setTransactionData } = useTransactionData();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
+  const [itemData, setItemData] = useState<ItemData>([]);
+  const [selectedImgUrl, setSelectedImgUrl] = useState<string | undefined>("");
 
   const getTransactionItems = async () => {
     try {
@@ -39,20 +52,40 @@ function ItemCards() {
       const responseData = await fetchData(url, method, body, headers);
 
       setTransactionData(responseData.transactions);
-      console.log(transactionData.length, "insde");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getItemsInfo = async () => {
+    try {
+      const token = await AsyncStorage.getItem("items");
+
+      const url = `${BASE_URL}/items`;
+      const method = "GET";
+      const body = "";
+      const headers = { Authorization: `Bearer ${token}` };
+      const responseItemInfoData = await fetchData(url, method, body, headers);
+
+      console.log(responseItemInfoData.items, "item info");
+      setItemData(responseItemInfoData.items);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    getTransactionItems();
-    console.log("halo");
-  }, [transactionData.length]);
+    getItemsInfo();
+  }, []);
 
   const handleInfo = (item: ItemType) => {
-    setModalVisible(true);
     setSelectedItem(item);
+
+    const test = itemData.find((items) => items.item_id === item.item_id);
+
+    setSelectedImgUrl(test?.imageUrl);
+
+    setModalVisible(true);
   };
 
   const handleDelete = async (transactionId: any) => {
@@ -131,6 +164,12 @@ function ItemCards() {
           <View style={styles.modalView}>
             {selectedItem && (
               <>
+                <Image
+                  source={{
+                    uri: selectedImgUrl,
+                  }}
+                  style={{ width: 200, height: 200, marginBottom: 30 }}
+                />
                 <Text style={styles.modalText}>Item Informations</Text>
                 <Text>{`Item Name: ${selectedItem.item_name}`}</Text>
                 <Text>{`Due Date: ${formatDate(selectedItem.due_date)}`}</Text>

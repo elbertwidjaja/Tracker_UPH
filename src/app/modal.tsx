@@ -8,6 +8,7 @@ import PickDate from "../components/PickDate";
 import * as Notifications from "expo-notifications";
 import { styles } from "./modalStyle";
 import { BASE_URL } from "@/env";
+import { useTransactionData } from "@/src/context/transactionData";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -18,6 +19,8 @@ Notifications.setNotificationHandler({
 });
 
 export default function ModalScreen() {
+  const { transactionData, setTransactionData } = useTransactionData();
+
   const { fetchData } = useFetch();
   const navigation = useNavigation();
 
@@ -92,7 +95,11 @@ export default function ModalScreen() {
         };
         const headers = { Authorization: `Bearer ${token}` };
 
+        console.log(purchaseDate, "pruchase datea modal ");
+        console.log(dueDate, "duedate modal ");
+
         const data = await fetchData(url, method, body, headers);
+        setTransactionData(data);
 
         const { status } = await Notifications.getPermissionsAsync();
 

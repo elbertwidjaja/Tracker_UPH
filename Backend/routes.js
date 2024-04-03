@@ -45,7 +45,7 @@ routes.delete(
   transactionController.deleteTransactionById
 );
 
-routes.get("/notification", getNotification);
+routes.get("/notification", authenticate, getNotification);
 
 // ADMIN ROUTES
 

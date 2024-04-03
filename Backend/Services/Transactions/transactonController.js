@@ -48,13 +48,32 @@ const addTransaction = (req, res) => {
   const { shopId, itemId, itemName, purchaseDate, dueDate, shopName } =
     req.body;
   console.log(req.body);
+  const formattedPurchaseDate = new Date(purchaseDate)
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " ");
+  const formattedDueDate = new Date(dueDate)
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " ");
+
+  console.log(formattedDueDate, "fdue");
   const addTransactionQuery =
     "INSERT INTO `transaction` (customer_id, shopId, item_id, item_name, purchase_date, due_date, shop_name) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
   connection.query(
     addTransactionQuery,
-    [customerId, shopId, itemId, itemName, purchaseDate, dueDate, shopName],
+    [
+      customerId,
+      shopId,
+      itemId,
+      itemName,
+      purchaseDate,
+      formattedDueDate,
+      shopName,
+    ],
     (err, results) => {
+      console.log(results, "resultsss");
       if (err) {
         console.error("Error:", err);
         return res.status(500).json({

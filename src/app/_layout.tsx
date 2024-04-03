@@ -11,10 +11,9 @@ import { useEffect, useState } from "react";
 
 import { useColorScheme } from "../components/useColorScheme";
 import Toast from "react-native-toast-message";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import StartScreen from "./SplashScreen";
-import { NavigationContainer } from "@react-navigation/native";
+
 import { AuthProvider } from "../context/AuthContext";
+import { TransactionDataProvider } from "../context/transactionData";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,23 +48,12 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  // const [token, setToken] = useState("");
-
-  // useEffect(() => {
-  //   const checkToken = async () => {
-  //     const storedToken = await AsyncStorage.getItem("token");
-  //     setToken(storedToken || "");
-  //   };
-  //   checkToken();
-  // }, []);
-
-  // if (token === "") {
-  //   return <StartScreen />;
-  // }
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <TransactionDataProvider>
+        <RootLayoutNav />
+      </TransactionDataProvider>
     </AuthProvider>
   );
 }

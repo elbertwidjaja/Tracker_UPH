@@ -1,9 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  flatListContainer: {
-    paddingHorizontal: 20,
-  },
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -66,11 +63,9 @@ export const styles = StyleSheet.create({
 
   //MODAL
   modalView: {
-    margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
+    padding: 40,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -85,6 +80,5 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     marginBottom: 15,
-    textAlign: "center",
   },
 });

@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const authenticate = (req, res, next) => {
-  console.log("masuk pak");
   const token = req.headers.authorization;
 
   if (!token || !token.startsWith("Bearer ")) {
