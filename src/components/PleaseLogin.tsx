@@ -2,8 +2,12 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+type RootStackParamList = {
+  navigate(arg0: string): void;
+};
+
 function PleaseLogin() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackParamList>();
 
   const handleLogin = () => {
     navigation.navigate("login");

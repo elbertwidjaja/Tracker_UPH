@@ -12,8 +12,9 @@ import { useEffect, useState } from "react";
 import { useColorScheme } from "../components/useColorScheme";
 import Toast from "react-native-toast-message";
 
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 import { TransactionDataProvider } from "../context/transactionData";
+import Login from "./login";
 
 export {
   // Catch any errors thrown by the Layout component.

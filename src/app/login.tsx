@@ -17,6 +17,7 @@ type RootStackParamList = {
 
 export default function Login() {
   const navigation = useNavigation<RootStackParamList>();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);

@@ -67,7 +67,6 @@ function ItemCards() {
       const headers = { Authorization: `Bearer ${token}` };
       const responseItemInfoData = await fetchData(url, method, body, headers);
 
-      console.log(responseItemInfoData.items, "item info");
       setItemData(responseItemInfoData.items);
     } catch (error) {
       console.error(error);

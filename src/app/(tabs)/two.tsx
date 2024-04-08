@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "../../components/Themed";
 import ItemCards from "@/src/components/ItemCards";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import PleaseLogin from "@/src/components/PleaseLogin";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/src/context/AuthContext";
@@ -25,7 +25,7 @@ export default function TabTwoScreen() {
             style={styles.addItemContainer}
             onPress={() => navigation.navigate("modal")}
           >
-            <Ionicons name="bag-add" size={24} color="black" />
+            <FontAwesome name="shopping-basket" size={24} color="white" />
             <Text style={styles.addItemText}>Add Item</Text>
           </TouchableOpacity>
           <View style={styles.container}>
@@ -44,16 +44,15 @@ const styles = StyleSheet.create({
   },
   addItemContainer: {
     flexDirection: "row",
-    backgroundColor: "#ADD8E6",
+    backgroundColor: "#4CAF50", // Green color
     padding: 15,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 20,
   },
   addItemText: {
     marginLeft: 10,
     fontSize: 16,
-    color: "black",
+    color: "white", // White color
   },
   yourCartText: {
     marginTop: 24,
