@@ -43,6 +43,7 @@ export default function TabOneScreen() {
       const body = "";
       const headers = { Authorization: `Bearer ${token}` };
       const responseData = await fetchData(url, method, body, headers);
+      console.log(responseData);
 
       setTransactionData(responseData.transactions);
       setLatestItem(responseData.transactions);
