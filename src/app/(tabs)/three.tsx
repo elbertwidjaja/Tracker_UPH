@@ -34,7 +34,10 @@ export default function Three() {
     const url = `${BASE_URL}profile`;
     const method = "GET";
     const body = "";
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "69420",
+    };
 
     const customerData = await fetchData(url, method, body, headers);
     setProfileData(customerData.data[0]);

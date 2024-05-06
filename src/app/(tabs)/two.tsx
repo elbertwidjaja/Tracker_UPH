@@ -5,6 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import PleaseLogin from "@/src/components/PleaseLogin";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/src/context/AuthContext";
+import React from "react";
 
 type RootStackParamList = {
   navigate(arg0: string): void;

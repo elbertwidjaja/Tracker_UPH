@@ -44,9 +44,12 @@ export default function ModalScreen() {
         const url2 = `${BASE_URL}items`;
         const method = "GET";
         const body = "";
+        const headers = {
+          "ngrok-skip-browser-warning": "true",
+        };
 
-        const responseShops = await fetchData(url1, method, body);
-        const responseItems = await fetchData(url2, method, body);
+        const responseShops = await fetchData(url1, method, body, headers);
+        const responseItems = await fetchData(url2, method, body, headers);
 
         const shopData = responseShops.map(
           (shop: { shop_name: string; shop_id: number }) => ({

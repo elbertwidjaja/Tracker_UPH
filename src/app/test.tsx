@@ -1,37 +1,33 @@
-import React from "react";
-import { Button, View } from "react-native";
-import * as Notifications from "expo-notifications";
-import * as Permissions from "expo-permissions";
+import React, { useState, useEffect } from "react";
+import { View, Text, Button } from "react-native";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+const API_URL =
+  "https://ac6a-2001-448a-10d0-e498-55be-b0ec-97fc-82ed.ngrok-free.app/api/customers";
 
-export default function NotificationButton() {
-  const handlePress = async () => {
-    const { status } = await Notifications.getPermissionsAsync();
+const FetchPage = () => {
+  const [data, setData] = useState(null);
 
-    if (status !== "granted") {
-      alert("Permission to send notifications was denied");
-      return;
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
     }
-
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "There is an item that almost due!",
-        body: "Please check you items right now!",
-      },
-      trigger: null,
-    });
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <View>
-      <Button title="Send Notification" onPress={handlePress} />
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Data from API:</Text>
+      {data ? <Text>{JSON.stringify(data)}</Text> : <Text>Loading...</Text>}
+      <Button title="Refresh" onPress={fetchData} />
     </View>
   );
-}
+};
+
+export default FetchPage;

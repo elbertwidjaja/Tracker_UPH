@@ -41,9 +41,11 @@ export default function TabOneScreen() {
       const url = `${BASE_URL}transaction/customer`;
       const method = "GET";
       const body = "";
-      const headers = { Authorization: `Bearer ${token}` };
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "69420",
+      };
       const responseData = await fetchData(url, method, body, headers);
-      console.log(responseData);
 
       setTransactionData(responseData.transactions);
       setLatestItem(responseData.transactions);
@@ -57,23 +59,32 @@ export default function TabOneScreen() {
     const url = `${BASE_URL}notification`;
     const method = "GET";
     const body = "";
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "69420",
+    };
 
     const data = await fetchData(url, method, body, headers);
+
     setNearestDue(data.data);
   };
 
   const twoLatestItem = latestItem.slice(-2);
 
   useEffect(() => {
-    getlatestItem();
-    getTransactionItems();
+    if (isLoggedIn) {
+      getlatestItem();
+      getTransactionItems();
+    }
   }, [transactionData.length]);
 
   return (
     <ScrollView>
       {!isLoggedIn ? (
-        <PleaseLogin />
+        <>
+          <ContactUsCard />
+          <PleaseLogin />
+        </>
       ) : (
         <View style={styles.container}>
           <View style={styles.header}>
@@ -82,52 +93,46 @@ export default function TabOneScreen() {
               <Ionicons name="log-in-outline" size={24} color="black" />
             </TouchableOpacity>
           </View>
-          <ContactUsCard />
+
           <Text style={styles.homeTitle}>Almost Due Date</Text>
-          <FlatList
-            data={nearestDue}
-            renderItem={({ item }: any) => {
-              const dueDate = new Date(item.due_date);
-              const currentDate = new Date();
-              const timeDiff = dueDate.getTime() - currentDate.getTime();
-              const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-              let message = "";
-              if (daysDiff <= 30) {
-                message = "Due in 30 days or less";
-              }
-              return (
-                <View style={styles.card}>
-                  <View style={styles.infoContainer}>
-                    <Text style={styles.title}>{item.item_name}</Text>
-                    <Text>{`Due Date: ${formatDate(item.due_date)}`}</Text>
-                    <Text>{`Purchase Date: ${formatDate(
-                      item.purchase_date
-                    )}`}</Text>
-                    <Text>{`Item ID: ${item.item_id}`}</Text>
-                    <Text style={styles.remainingDays}>{message}</Text>
-                  </View>
+          {nearestDue.map((item: any, index: number) => {
+            const dueDate = new Date(item.due_date);
+            const currentDate = new Date();
+            const timeDiff = dueDate.getTime() - currentDate.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            let message = "";
+            if (daysDiff <= 30) {
+              message = "Due in 30 days or less";
+            }
+            return (
+              <View style={styles.card} key={index}>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>{item.item_name}</Text>
+                  <Text>{`Due Date: ${formatDate(item.due_date)}`}</Text>
+                  <Text>{`Purchase Date: ${formatDate(
+                    item.purchase_date
+                  )}`}</Text>
+                  <Text>{`Item ID: ${item.item_id}`}</Text>
+                  <Text style={styles.remainingDays}>{message}</Text>
                 </View>
-              );
-            }}
-          />
+              </View>
+            );
+          })}
           <Text style={styles.homeTitle}>Recently Added</Text>
-          <FlatList
-            data={twoLatestItem}
-            renderItem={({ item }: any) => {
-              return (
-                <View style={styles.card}>
-                  <View style={styles.infoContainer}>
-                    <Text style={styles.title}>{item.item_name}</Text>
-                    <Text>{`Due Date: ${formatDate(item.due_date)}`}</Text>
-                    <Text>{`Purchase Date: ${formatDate(
-                      item.purchase_date
-                    )}`}</Text>
-                    <Text>{`Item ID: ${item.item_id}`}</Text>
-                  </View>
+          {twoLatestItem.map((item: any, index: number) => {
+            return (
+              <View style={styles.card} key={index}>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>{item.item_name}</Text>
+                  <Text>{`Due Date: ${formatDate(item.due_date)}`}</Text>
+                  <Text>{`Purchase Date: ${formatDate(
+                    item.purchase_date
+                  )}`}</Text>
+                  <Text>{`Item ID: ${item.item_id}`}</Text>
                 </View>
-              );
-            }}
-          />
+              </View>
+            );
+          })}
         </View>
       )}
     </ScrollView>

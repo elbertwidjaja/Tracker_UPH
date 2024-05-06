@@ -28,6 +28,11 @@ export default function PickDate({ onDateChange }: any) {
     const formattedDay = day.padStart(2, "0");
     const formattedMonth = month.padStart(2, "0");
     const formattedYear = year.padStart(4, "0");
+
+    if (Number(formattedYear) < 2024) {
+      return "";
+    }
+
     const date = `${formattedYear}-${formattedMonth}-${formattedDay}`;
     return date;
   };

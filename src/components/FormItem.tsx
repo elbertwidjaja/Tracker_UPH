@@ -34,7 +34,10 @@ const FormItem = () => {
     const url = `${BASE_URL}admin/items`;
     const method = "GET";
     const body = "";
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "ngrok-skip-browser-warning": "69420",
+    };
 
     const itemsData = await fetchData(url, method, body, headers);
     setItems(itemsData);

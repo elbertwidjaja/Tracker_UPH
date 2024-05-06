@@ -48,7 +48,10 @@ function ItemCards() {
       const url = `${BASE_URL}transaction/customer`;
       const method = "GET";
       const body = "";
-      const headers = { Authorization: `Bearer ${token}` };
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "69420",
+      };
       const responseData = await fetchData(url, method, body, headers);
 
       setTransactionData(responseData.transactions);
@@ -64,7 +67,10 @@ function ItemCards() {
       const url = `${BASE_URL}/items`;
       const method = "GET";
       const body = "";
-      const headers = { Authorization: `Bearer ${token}` };
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "69420",
+      };
       const responseItemInfoData = await fetchData(url, method, body, headers);
 
       setItemData(responseItemInfoData.items);

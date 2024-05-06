@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useAuth } from "../context/AuthContext";
+import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
   navigate(arg0: string): void;
@@ -27,6 +28,12 @@ export default function Login() {
   const navigateToSignup = () => navigation.navigate("singup");
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Toast.show({
+        type: "error",
+        text1: "Please fill the email and password correctly.",
+      });
+    }
     await login(email, password);
   };
 
